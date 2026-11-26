@@ -1249,9 +1249,10 @@ def test_installable_engine_ids_follow_the_host(monkeypatch, family, platform, m
     monkeypatch.setattr(platform_mod, "machine", lambda: machine)
     # Offered on every host: IndexTTS 2.5, Confucius4, Supertonic-3.
     expected = set(expected) | {"indextts2", "confucius4-tts", "supertonic3"}
-    # IndicF5's pinned PyTorch has no Intel Mac build; every other host gets it.
+    # IndicF5's and Indic Parler-TTS's pinned PyTorch has no Intel Mac build;
+    # every other host gets them.
     if not (platform == "darwin" and machine == "x86_64"):
-        expected.add("indicf5")
+        expected |= {"indicf5", "indic-parler-tts"}
     assert si.installable_engine_ids() == frozenset(expected)
 
 

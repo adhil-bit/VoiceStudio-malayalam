@@ -29,6 +29,7 @@ SIDECARS = [
     "engines.confucius4.main",
     "engines.dots_tts.main",
     "engines.indextts.main",
+    "engines.indic_parler.main",
     "engines.indicf5.main",
     "engines.ming_tts.main",
     "engines.moss_sfx.main",

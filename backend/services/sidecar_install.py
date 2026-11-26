@@ -252,6 +252,16 @@ def _indicf5_installed() -> bool:
     return is_indicf5_installed()
 
 
+def _indic_parler_invalidate() -> None:
+    from engines.indic_parler import bootstrap
+    bootstrap.invalidate()
+
+
+def _indic_parler_installed() -> bool:
+    from engines.indic_parler.bootstrap import is_indic_parler_installed
+    return is_indic_parler_installed()
+
+
 def _ming_invalidate() -> None:
     from engines.ming_tts import bootstrap
     bootstrap.invalidate()
@@ -909,6 +919,41 @@ SPECS: dict[str, SidecarSpec] = {
         installed_probe=_indicf5_installed,
         host_supported=_no_intel_mac(
             "IndicF5 needs a PyTorch version that has no Intel Mac build."
+        ),
+    ),
+    # Indic Parler-TTS (AI4Bharat) on Hugging Face's parler-tts runtime, which
+    # pins transformers==4.46.1. The same venv also runs MMS-TTS Malayalam
+    # (engine "mms-tts-mal"), which has no install of its own. Weights (~3.8 GB,
+    # gated) download on first synthesis at the revisions pinned in
+    # engines/indic_parler/main.py.
+    "indic-parler-tts": SidecarSpec(
+        engine_id="indic-parler-tts",
+        display_name="Indic Parler-TTS",
+        repo_url="https://github.com/huggingface/parler-tts.git",
+        tarball_url=(
+            "https://github.com/huggingface/parler-tts/archive/"
+            "d108732cd57788ec86bc857d99a6cabd66663d68.tar.gz"
+        ),
+        checkout_dirname="parler-tts",
+        env_var="OMNIVOICE_INDIC_PARLER_DIR",
+        probe_module="parler_tts",
+        source_revision="d108732cd57788ec86bc857d99a6cabd66663d68",
+        source_required_path="parler_tts/__init__.py",
+        venv_args=("--python", "3.10"),
+        install_args=("-e", "{checkout}"),
+        # Upstream leaves torch unpinned; pin a pair so Windows gets a CUDA
+        # build on a CUDA host instead of PyPI's CPU-only wheel.
+        torch_pins=("torch==2.7.0", "torchaudio==2.7.0"),
+        docs_path="docs/engines/indic-parler-tts.md",
+        # ~6 GB venv (CUDA torch) now, ~3.8 GB of gated weights on first use.
+        required_bytes=11 * _GIB,
+        dependency_bytes=7 * _GIB,
+        temporary_free_bytes=7 * _GIB,
+        disk_confidence="estimated",
+        invalidate=_indic_parler_invalidate,
+        installed_probe=_indic_parler_installed,
+        host_supported=_no_intel_mac(
+            "Indic Parler-TTS needs a PyTorch version that has no Intel Mac build."
         ),
     ),
 }

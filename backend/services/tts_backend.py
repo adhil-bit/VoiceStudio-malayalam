@@ -4198,6 +4198,11 @@ _LAZY_REGISTRY: dict[str, tuple[str, str]] = {
     # Indian languages. Opt-in, own Python 3.10 venv (upstream pins
     # transformers<4.50 / numpy<=1.26.4). Gated behind its venv.
     "indicf5": ("engines.indicf5", "IndicF5Backend"),
+    # AI4Bharat Indic Parler-TTS (voice from a description, 21 languages) and
+    # Meta MMS-TTS Malayalam share one opt-in sidecar venv (parler-tts pins
+    # transformers==4.46.1). Neither clones; both are gated behind that venv.
+    "indic-parler-tts": ("engines.indic_parler", "IndicParlerBackend"),
+    "mms-tts-mal": ("engines.indic_parler", "MMSMalayalamBackend"),
     # audio.cpp (0xShug0/audio.cpp) — pure-C++ ggml runtime, no Python venv.
     # v1 serves Breeze-TTS-2 (en+zh, clone+design) through a parent-managed
     # audiocpp_server over loopback HTTP. Gated behind a server binary
@@ -4317,6 +4322,8 @@ _INSTALL_HINTS: dict[str, str] = {
     "dots-tts":      "git clone rednote-hilab/dots.tts + set OMNIVOICE_DOTS_TTS_DIR  (own venv, transformers==4.57; 2B, ~9 GB weights; CUDA/CPU, Linux/macOS only — on Windows use the audio.cpp dots.tts engine; Apache-2.0)",
     "confucius4-tts":"git clone netease-youdao/Confucius4-TTS + set OMNIVOICE_CONFUCIUS4_TTS_DIR  (own Python 3.10 venv; 14-lang cross-lingual zero-shot clone; ~5 GB weights auto-download; CUDA/ROCm/XPU/NPU/CPU, no MPS; Apache-2.0)",
     "indicf5":       "Model Catalogue → IndicF5 → Install, or git clone AI4Bharat/IndicF5 + set OMNIVOICE_INDICF5_DIR  (own Python 3.10 venv, transformers<4.50; Malayalam + 10 Indian languages, voice cloning with reference transcript; ~1.4 GB gated weights on first use — accept terms on Hugging Face + set HF token; CUDA/MPS/CPU; MIT weights)",
+    "indic-parler-tts": "Model Catalogue → Indic Parler-TTS → Install, or git clone huggingface/parler-tts + set OMNIVOICE_INDIC_PARLER_DIR  (own Python 3.10 venv, transformers==4.46.1; Malayalam + 20 languages, voice described in words, no cloning; ~3.8 GB gated weights on first use — accept terms on Hugging Face + set HF token; CUDA/MPS/CPU; Apache-2.0 weights)",
+    "mms-tts-mal":   "Install Indic Parler-TTS first (shared runtime), then pick MMS-TTS Malayalam  (Meta VITS, one Malayalam voice, ~150 MB on first use; CUDA/MPS/CPU; CC-BY-NC-4.0 weights — non-commercial, licence acceptance required)",
     "ming-tts":      "git clone inclusionAI/Ming-3.0-tts + set OMNIVOICE_MING_TTS_DIR  (own Python 3.10 venv, transformers==4.46.3; 0.5B, ~3 GB weights auto-download; 7 langs zero-shot clone; NVIDIA CUDA only; MIT)",
     "audiocpp":     "download the matching audio.cpp v0.9.4 prebuilt + set OMNIVOICE_AUDIOCPP_BIN, then explicitly install Breeze-TTS-2 in Model Catalogue → Models  (native CPU/Vulkan/CUDA/Metal GGUF server, no Python; en+zh clone+design; ~4.73 GiB; weights research/non-commercial only)",
     "audiocpp-dots": "download the matching audio.cpp v0.9.4 prebuilt (Model Catalogue installs it) + explicitly install dots.tts SOAR in Model Catalogue → Models  (native CPU/Vulkan/CUDA/Metal GGUF on Windows, macOS and Linux; multilingual voice cloning; ~3 GB; Apache-2.0)",
@@ -4339,6 +4346,8 @@ _SETUP_SNIPPETS: dict[str, str] = {
     "confucius4-tts": "export OMNIVOICE_CONFUCIUS4_TTS_DIR=/path/to/Confucius4-TTS",
     "ming-tts":       "export OMNIVOICE_MING_TTS_DIR=/path/to/Ming-3.0-tts",
     "indicf5":        "export OMNIVOICE_INDICF5_DIR=/path/to/IndicF5",
+    "indic-parler-tts": "export OMNIVOICE_INDIC_PARLER_DIR=/path/to/parler-tts",
+    "mms-tts-mal":    "export OMNIVOICE_INDIC_PARLER_DIR=/path/to/parler-tts",
     # #919: sherpa-onnx gates on a downloaded model dir (model.onnx + tokens.txt).
     "sherpa-onnx":    "export OMNIVOICE_SHERPA_MODEL=/path/to/sherpa-onnx-model",
 }
@@ -4367,6 +4376,8 @@ _ENGINE_DOCS: dict[str, str] = {
     "confucius4-tts":       "docs/engines/confucius4-tts.md",
     "ming-tts":             "docs/engines/ming-tts.md",
     "indicf5":              "docs/engines/indicf5.md",
+    "indic-parler-tts":     "docs/engines/indic-parler-tts.md",
+    "mms-tts-mal":          "docs/engines/indic-parler-tts.md",
     "indextts2":            "docs/engines/indextts.md",
     "gpt-sovits":           "docs/engines/gpt-sovits.md",
     "sherpa-onnx":          "docs/engines/sherpa-onnx.md",

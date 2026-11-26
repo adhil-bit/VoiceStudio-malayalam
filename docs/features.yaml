@@ -69,6 +69,10 @@ tts_engines:
     doc: docs/engines/ming-tts.md
   - id: indicf5
     doc: docs/engines/indicf5.md
+  - id: indic-parler-tts
+    doc: docs/engines/indic-parler-tts.md
+  - id: mms-tts-mal
+    doc: docs/engines/indic-parler-tts.md
   - id: pockettts
   - id: audiocpp
     doc: docs/engines/audio-cpp.md

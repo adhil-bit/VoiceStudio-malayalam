@@ -37,6 +37,8 @@ Engine availability depends on installed models, hardware, and configured provid
 - **Confucius4-TTS** — [Guide](engines/confucius4-tts.md)
 - ming-tts — [Guide](engines/ming-tts.md)
 - indicf5 — [Guide](engines/indicf5.md)
+- indic-parler-tts — [Guide](engines/indic-parler-tts.md)
+- mms-tts-mal — [Guide](engines/indic-parler-tts.md)
 - pockettts
 - audiocpp — [Guide](engines/audio-cpp.md)
 - audiocpp-dots — [Guide](engines/audio-cpp.md)
