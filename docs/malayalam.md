@@ -76,7 +76,7 @@ runs the same Indic Parler-TTS / MMS-TTS engine code on a GitHub runner:
    variables → Actions) from a Hugging Face account that accepted the model's
    terms. Without it the workflow uses MMS-TTS Malayalam (non-commercial).
 3. Upload the exported reel as `reels/reel.mp4`, or run the workflow by hand.
-4. Download `final_reel.mp4` (and each line's WAV) from the run's **Artifacts**.
+4. Download `final_reel.mp4` (and each line's WAV) from the run's **Artifacts**, or from the `reel-output` branch.
 
 ## Open Malayalam speech datasets
 

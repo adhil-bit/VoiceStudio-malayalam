@@ -15,9 +15,10 @@ on:
   push:
     paths:
       - "reels/**"
+      - ".github/workflows/malayalam-reel.yml"
 
 permissions:
-  contents: read
+  contents: write   # publish the result to the reel-output branch
 
 jobs:
   render:
@@ -56,3 +57,15 @@ jobs:
           name: malayalam-reel-${{ steps.pick.outputs.engine }}
           path: out/
           retention-days: 14
+      # Also keep the newest result on the reel-output branch, so it can be
+      # fetched with plain git (and opened from the repo page) as well.
+      - name: Publish to the reel-output branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd out
+          git init -q -b reel-output
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Malayalam reel voice (${{ steps.pick.outputs.engine }}) from ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" reel-output
