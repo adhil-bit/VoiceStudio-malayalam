@@ -4194,6 +4194,10 @@ _LAZY_REGISTRY: dict[str, tuple[str, str]] = {
     # own Python 3.10 venv (upstream pins transformers==4.46.3 / torch==2.6.0,
     # which conflict with the parent's >=5.3). Gated behind its venv + a CUDA host.
     "ming-tts": ("engines.ming_tts", "MingTTSBackend"),
+    # IndicF5 (AI4Bharat) — F5-TTS voice cloning for Malayalam and 10 other
+    # Indian languages. Opt-in, own Python 3.10 venv (upstream pins
+    # transformers<4.50 / numpy<=1.26.4). Gated behind its venv.
+    "indicf5": ("engines.indicf5", "IndicF5Backend"),
     # audio.cpp (0xShug0/audio.cpp) — pure-C++ ggml runtime, no Python venv.
     # v1 serves Breeze-TTS-2 (en+zh, clone+design) through a parent-managed
     # audiocpp_server over loopback HTTP. Gated behind a server binary
@@ -4312,6 +4316,7 @@ _INSTALL_HINTS: dict[str, str] = {
     "moss-tts-v15":  "git clone OpenMOSS/MOSS-TTS + set OMNIVOICE_MOSS_TTS_V15_DIR  (own venv, transformers==5.0; 8B, ~16 GB weights; CUDA/ROCm/XPU/NPU/CPU, no MPS; Apache-2.0)",
     "dots-tts":      "git clone rednote-hilab/dots.tts + set OMNIVOICE_DOTS_TTS_DIR  (own venv, transformers==4.57; 2B, ~9 GB weights; CUDA/CPU, Linux/macOS only — on Windows use the audio.cpp dots.tts engine; Apache-2.0)",
     "confucius4-tts":"git clone netease-youdao/Confucius4-TTS + set OMNIVOICE_CONFUCIUS4_TTS_DIR  (own Python 3.10 venv; 14-lang cross-lingual zero-shot clone; ~5 GB weights auto-download; CUDA/ROCm/XPU/NPU/CPU, no MPS; Apache-2.0)",
+    "indicf5":       "Model Catalogue → IndicF5 → Install, or git clone AI4Bharat/IndicF5 + set OMNIVOICE_INDICF5_DIR  (own Python 3.10 venv, transformers<4.50; Malayalam + 10 Indian languages, voice cloning with reference transcript; ~1.4 GB gated weights on first use — accept terms on Hugging Face + set HF token; CUDA/MPS/CPU; MIT weights)",
     "ming-tts":      "git clone inclusionAI/Ming-3.0-tts + set OMNIVOICE_MING_TTS_DIR  (own Python 3.10 venv, transformers==4.46.3; 0.5B, ~3 GB weights auto-download; 7 langs zero-shot clone; NVIDIA CUDA only; MIT)",
     "audiocpp":     "download the matching audio.cpp v0.9.4 prebuilt + set OMNIVOICE_AUDIOCPP_BIN, then explicitly install Breeze-TTS-2 in Model Catalogue → Models  (native CPU/Vulkan/CUDA/Metal GGUF server, no Python; en+zh clone+design; ~4.73 GiB; weights research/non-commercial only)",
     "audiocpp-dots": "download the matching audio.cpp v0.9.4 prebuilt (Model Catalogue installs it) + explicitly install dots.tts SOAR in Model Catalogue → Models  (native CPU/Vulkan/CUDA/Metal GGUF on Windows, macOS and Linux; multilingual voice cloning; ~3 GB; Apache-2.0)",
@@ -4333,6 +4338,7 @@ _SETUP_SNIPPETS: dict[str, str] = {
     "dots-tts":       "export OMNIVOICE_DOTS_TTS_DIR=/path/to/dots.tts",
     "confucius4-tts": "export OMNIVOICE_CONFUCIUS4_TTS_DIR=/path/to/Confucius4-TTS",
     "ming-tts":       "export OMNIVOICE_MING_TTS_DIR=/path/to/Ming-3.0-tts",
+    "indicf5":        "export OMNIVOICE_INDICF5_DIR=/path/to/IndicF5",
     # #919: sherpa-onnx gates on a downloaded model dir (model.onnx + tokens.txt).
     "sherpa-onnx":    "export OMNIVOICE_SHERPA_MODEL=/path/to/sherpa-onnx-model",
 }
@@ -4360,6 +4366,7 @@ _ENGINE_DOCS: dict[str, str] = {
     "dots-tts":             "docs/engines/dots-tts.md",
     "confucius4-tts":       "docs/engines/confucius4-tts.md",
     "ming-tts":             "docs/engines/ming-tts.md",
+    "indicf5":              "docs/engines/indicf5.md",
     "indextts2":            "docs/engines/indextts.md",
     "gpt-sovits":           "docs/engines/gpt-sovits.md",
     "sherpa-onnx":          "docs/engines/sherpa-onnx.md",

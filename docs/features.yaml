@@ -67,6 +67,8 @@ tts_engines:
     doc: docs/engines/mlx-audio.md
   - id: ming-tts
     doc: docs/engines/ming-tts.md
+  - id: indicf5
+    doc: docs/engines/indicf5.md
   - id: pockettts
   - id: audiocpp
     doc: docs/engines/audio-cpp.md

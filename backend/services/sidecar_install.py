@@ -242,6 +242,16 @@ def _dots_installed() -> bool:
     return is_dots_tts_installed()
 
 
+def _indicf5_invalidate() -> None:
+    from engines.indicf5 import bootstrap
+    bootstrap.invalidate()
+
+
+def _indicf5_installed() -> bool:
+    from engines.indicf5.bootstrap import is_indicf5_installed
+    return is_indicf5_installed()
+
+
 def _ming_invalidate() -> None:
     from engines.ming_tts import bootstrap
     bootstrap.invalidate()
@@ -862,6 +872,43 @@ SPECS: dict[str, SidecarSpec] = {
         installed_probe=_in_app_env("cosyvoice"),
         host_supported=_no_intel_mac(
             "CosyVoice 3 needs a PyTorch version that has no Intel Mac build."
+        ),
+    ),
+    # IndicF5 (AI4Bharat): F5-TTS voice cloning for Malayalam and 10 other
+    # Indian languages. Upstream ships setup.py (package ``f5_tts``) plus a
+    # requirements.txt that pins transformers<4.50 and numpy<=1.26.4, so it
+    # gets its own Python 3.10 venv. The gated ~1.4 GB weights download on
+    # first synthesis at the revision pinned in engines/indicf5/main.py.
+    "indicf5": SidecarSpec(
+        engine_id="indicf5",
+        display_name="IndicF5",
+        repo_url="https://github.com/AI4Bharat/IndicF5.git",
+        tarball_url=(
+            "https://github.com/AI4Bharat/IndicF5/archive/"
+            "13f7c4d627cc10111aea8fe9c0039462cacacdc7.tar.gz"
+        ),
+        checkout_dirname="IndicF5",
+        env_var="OMNIVOICE_INDICF5_DIR",
+        probe_module="f5_tts",
+        source_revision="13f7c4d627cc10111aea8fe9c0039462cacacdc7",
+        # No pyproject.toml upstream: setup.py is its manifest.
+        source_manifest="setup.py",
+        source_required_path="f5_tts/infer/utils_infer.py",
+        venv_args=("--python", "3.10"),
+        install_args=("-r", "{checkout}/requirements.txt", "-e", "{checkout}"),
+        # Upstream leaves torch unpinned; pin a pair so Windows gets a CUDA
+        # build on a CUDA host instead of PyPI's CPU-only wheel.
+        torch_pins=("torch==2.7.0", "torchaudio==2.7.0"),
+        docs_path="docs/engines/indicf5.md",
+        # ~6 GB venv (CUDA torch) now, ~1.4 GB of gated weights on first use.
+        required_bytes=9 * _GIB,
+        dependency_bytes=7 * _GIB,
+        temporary_free_bytes=7 * _GIB,
+        disk_confidence="estimated",
+        invalidate=_indicf5_invalidate,
+        installed_probe=_indicf5_installed,
+        host_supported=_no_intel_mac(
+            "IndicF5 needs a PyTorch version that has no Intel Mac build."
         ),
     ),
 }

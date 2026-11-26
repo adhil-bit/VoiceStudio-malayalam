@@ -2817,6 +2817,48 @@
       }
     },
     {
+      "id": "ai4bharat/IndicF5",
+      "license": "mit",
+      "commercial_use": false,
+      "review_status": "unreviewed",
+      "credit": "ai4bharat/IndicF5 (AI4Bharat, IIT Madras)",
+      "source_url": "https://huggingface.co/ai4bharat/IndicF5",
+      "evidence_url": "https://huggingface.co/ai4bharat/IndicF5/blob/fb652a96e508091045890dae5bb99fe511facbcf/README.md",
+      "revision": "fb652a96e508091045890dae5bb99fe511facbcf",
+      "engines": [
+        "indicf5"
+      ],
+      "configured_at": "backend/engines/indicf5/main.py:42",
+      "notes": "MIT is the model card's licence metadata for the weights; it is not verified permission for this distribution. The repository is gated (terms accepted on the Hub), ships remote code run at the pinned revision, and the GitHub source (AI4Bharat/IndicF5) carries no LICENSE file. Training data (Rasa, IndicTTS, LIMMITS, IndicVoices-R) and the Vocos vocoder terms require review.",
+      "runtime_revision": null,
+      "runtime_pin_scope": "external",
+      "runtime_pin_source": null,
+      "component_closure": "incomplete",
+      "commercial_inference": "unknown",
+      "commercial_outputs": "unknown",
+      "documents": [],
+      "artifacts": [],
+      "required_components": [],
+      "upstream_access": "unknown",
+      "audit_observations": {
+        "commercial_inference": {
+          "status": "unreviewed",
+          "scope": "Selected weight/component only; not complete workflow clearance."
+        },
+        "output_terms": {
+          "status": "not_assessed",
+          "ownership_or_all_rights_cleared": false
+        },
+        "sources": [],
+        "open_questions": [
+          "Governing terms of the code repository (no LICENSE file at the pinned commit) and of the Vocos vocoder at the installed revision",
+          "Training-data terms (Rasa, IndicTTS, LIMMITS, IndicVoices-R) and attribution/NOTICE duties",
+          "Reference voice and input rights, consent, training-provenance scope"
+        ],
+        "identified_components": []
+      }
+    },
+    {
       "id": "facebook/w2v-bert-2.0",
       "license": "mit",
       "commercial_use": false,
