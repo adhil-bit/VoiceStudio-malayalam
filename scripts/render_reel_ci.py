@@ -84,13 +84,18 @@ def main(argv: list[str] | None = None) -> int:
         clips.append((float(line["at"]), path))
 
     ffmpeg = shutil.which("ffmpeg") or sys.exit("ffmpeg not found")
+    end = reel.REEL_SECONDS if not args.script else max(a for a, _ in clips) + 8
+    tempos = reel.fit_tempos(clips, end)
+    for (at, path), tempo in zip(clips, tempos):
+        if tempo > 1.0:
+            print(f"  {path.name}: sped up x{tempo} to finish before the next line", flush=True)
     voice = args.out / "narration.wav"
-    subprocess.run(reel.mix_command(ffmpeg, clips, voice, None, args.music_volume), check=True)
+    subprocess.run(reel.mix_command(ffmpeg, clips, voice, None, args.music_volume, tempos), check=True)
     print(f"Voice track: {voice}")
     if args.video and args.video.is_file():
         final = args.out / "final_reel.mp4"
         if reel.has_audio(ffmpeg, args.video):
-            cmd = reel.mix_command(ffmpeg, clips, final, args.video, args.music_volume)
+            cmd = reel.mix_command(ffmpeg, clips, final, args.video, args.music_volume, tempos)
         else:
             cmd = [ffmpeg, "-y", "-i", str(args.video), "-i", str(voice), "-map", "0:v", "-map", "1:a",
                    "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", str(final)]
