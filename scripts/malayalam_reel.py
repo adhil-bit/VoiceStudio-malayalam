@@ -16,7 +16,8 @@ choose, placed at its start time, and mixed over the video's music.
     python scripts/malayalam_reel.py --video reel.mp4 --engine indicf5 --profile-id ab12cd34
 
 Without --video it writes only the narration track. The built-in script is the
-"Spotlight Effect" reel (scene starts 0, 5, 13, 20, 30, 36 s); pass
+"Spotlight Effect" reel, word for word as on screen and timed to it; a line too
+long for its moment is sped up (at most x1.4) so it never runs into the next. Pass
 ``--script my.json`` (a list of {"at": seconds, "text": "..."}) for another.
 
 Needs ffmpeg on PATH (VoiceStudio installs one; any ffmpeg works) and
@@ -35,14 +36,23 @@ import urllib.request
 import uuid
 from pathlib import Path
 
+# Each line is exactly the words on screen, spoken when they appear in the
+# "Spotlight Effect" reel (scenes start at 0, 5, 13, 20, 30, 36 s; 40 s long).
 SPOTLIGHT_REEL = [
-    {"at": 0.2, "text": "ഒരു ചെറിയ തെറ്റ് പറ്റുമ്പോൾ… എല്ലാവരും നിന്നെ മാത്രം നോക്കുകയാണെന്ന് തോന്നിയിട്ടുണ്ടോ?"},
-    {"at": 5.2, "text": "കോളേജ് ഫംഗ്ഷനിൽ പാടുമ്പോൾ മീരയുടെ ശബ്ദം ഒന്ന് പതറി."},
-    {"at": 13.2, "text": "അന്ന് രാത്രി മുഴുവൻ അവൾ ഉറങ്ങിയില്ല. എല്ലാവരും കളിയാക്കും എന്ന് അവൾ ഉറപ്പിച്ചു."},
-    {"at": 20.2, "text": "പിറ്റേന്ന് അവൾ കൂട്ടുകാരിയോട് ചോദിച്ചു. അവൾ ചിരിച്ചു: ഏത് പതർച്ച? നീ നന്നായി പാടിയല്ലോ!"},
-    {"at": 30.2, "text": "ഇതാണ് സ്പോട്ട്‌ലൈറ്റ് ഇഫക്റ്റ്. നമ്മൾ വിചാരിക്കുന്നതിന്റെ പകുതി പോലും ആളുകൾ നമ്മളെ ശ്രദ്ധിക്കുന്നില്ല."},
-    {"at": 36.2, "text": "അതുകൊണ്ട്… പേടിക്കാതെ മുന്നോട്ട് പോകൂ."},
+    {"at": 0.1, "text": "ഒരു ചെറിയ തെറ്റ് പറ്റുമ്പോൾ… എല്ലാവരും നിന്നെ മാത്രം നോക്കുന്നതായി തോന്നിയിട്ടുണ്ടോ?"},
+    {"at": 5.2, "text": "കോളേജ് ഫംഗ്ഷനിൽ പാടുമ്പോൾ…"},
+    {"at": 8.9, "text": "മീരയുടെ ശബ്ദം ഒന്ന് പതറി."},
+    {"at": 13.2, "text": "അന്ന് രാത്രി മുഴുവൻ അവൾ ഉറങ്ങിയില്ല."},
+    {"at": 16.0, "text": "എല്ലാവരും എന്നെ കളിയാക്കും!"},
+    {"at": 20.1, "text": "പിറ്റേന്ന് അവൾ കൂട്ടുകാരിയോട് ചോദിച്ചു."},
+    {"at": 23.1, "text": "ഇന്നലെ… എന്റെ ശബ്ദം?"},
+    {"at": 24.9, "text": "ഏത് പതർച്ച? നീ നന്നായി പാടിയല്ലോ!"},
+    {"at": 30.1, "text": "സ്പോട്ട്‌ലൈറ്റ് ഇഫക്റ്റ്."},
+    {"at": 31.6, "text": "നമ്മൾ വിചാരിക്കുന്നതിന്റെ പകുതി പോലും ആളുകൾ നമ്മളെ ശ്രദ്ധിക്കുന്നില്ല."},
+    {"at": 36.1, "text": "പേടിക്കാതെ മുന്നോട്ട് പോകൂ."},
 ]
+REEL_SECONDS = 40.0
+MAX_SPEEDUP = 1.4
 
 DEFAULT_DESCRIPTION = (
     "Anjali speaks in a warm, gentle storytelling tone at a moderate pace, with "
@@ -100,8 +110,29 @@ def generate(server: str, text: str, args, api_key: str | None, timeout: float) 
         ) from None
 
 
+def wav_seconds(path: Path) -> float | None:
+    import wave
+    try:
+        with wave.open(str(path)) as w:
+            return w.getnframes() / float(w.getframerate())
+    except Exception:
+        return None
+
+
+def fit_tempos(clips: list[tuple[float, Path]], end: float, gap: float = 0.12) -> list[float]:
+    """How much to speed each line up so it ends before the next line starts
+    (the last one before ``end``). 1.0 means as spoken; at most MAX_SPEEDUP."""
+    tempos = []
+    for i, (at, path) in enumerate(clips):
+        until = clips[i + 1][0] if i + 1 < len(clips) else end
+        slot, secs = max(0.3, until - at - gap), wav_seconds(path)
+        tempos.append(round(min(MAX_SPEEDUP, max(1.0, secs / slot)), 3) if secs else 1.0)
+    return tempos
+
+
 def mix_command(ffmpeg: str, clips: list[tuple[float, Path]], out: Path,
-                video: Path | None, music_volume: float) -> list[str]:
+                video: Path | None, music_volume: float,
+                tempos: list[float] | None = None) -> list[str]:
     """One ffmpeg call: each clip delayed to its start, mixed, and (with a
     video) laid over the video's own audio, which is turned down."""
     cmd = [ffmpeg, "-y"]
@@ -113,7 +144,9 @@ def mix_command(ffmpeg: str, clips: list[tuple[float, Path]], out: Path,
     parts, labels = [], []
     for i, (at, _) in enumerate(clips):
         ms = max(0, int(round(at * 1000)))
-        parts.append(f"[{first + i}:a]aresample=48000,adelay={ms}|{ms}[v{i}]")
+        tempo = tempos[i] if tempos else 1.0
+        speed = f",atempo={tempo}" if tempo != 1.0 else ""
+        parts.append(f"[{first + i}:a]aresample=48000{speed},adelay={ms}|{ms}[v{i}]")
         labels.append(f"[v{i}]")
     parts.append("".join(labels) + f"amix=inputs={len(clips)}:normalize=0[voice]")
     if video:
@@ -173,20 +206,24 @@ def main(argv: list[str] | None = None) -> int:
         path.write_bytes(wav)
         clips.append((float(line["at"]), path))
 
+    tempos = fit_tempos(clips, REEL_SECONDS if not args.script else max(a for a, _ in clips) + 8)
+    for (at, path), tempo in zip(clips, tempos):
+        if tempo > 1.0:
+            print(f"  {path.name}: sped up x{tempo} to finish before the next line")
     video = args.video
     if video and not has_audio(ffmpeg, video):
         # A silent export: lay the voice on alone.
         silent = args.keep / "_silence.wav"
         subprocess.run([ffmpeg, "-y", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-t", "1", str(silent)],
                        check=True, capture_output=True)
-        cmd = mix_command(ffmpeg, clips, out, None, args.music_volume)
+        cmd = mix_command(ffmpeg, clips, out, None, args.music_volume, tempos)
         voice = args.keep / "_voice.wav"
         cmd[-1] = str(voice)
         subprocess.run(cmd, check=True, capture_output=True)
         cmd = [ffmpeg, "-y", "-i", str(video), "-i", str(voice), "-map", "0:v", "-map", "1:a",
                "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", str(out)]
     else:
-        cmd = mix_command(ffmpeg, clips, out, video, args.music_volume)
+        cmd = mix_command(ffmpeg, clips, out, video, args.music_volume, tempos)
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode:
         print(result.stderr[-2000:], file=sys.stderr)

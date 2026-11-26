@@ -24,5 +24,27 @@ def test_multipart_carries_malayalam_text():
     assert "നമസ്കാരം".encode() in body and b'name="skip"' not in body
 
 
-def test_builtin_script_matches_the_reel_scenes():
-    assert [round(l["at"]) for l in mod.SPOTLIGHT_REEL] == [0, 5, 13, 20, 30, 36]
+def test_builtin_script_speaks_the_words_on_screen_in_order():
+    ats = [l["at"] for l in mod.SPOTLIGHT_REEL]
+    assert ats == sorted(ats) and ats[0] < 0.5 and ats[-1] < mod.REEL_SECONDS
+    scenes = (ROOT / "scripts/malayalam_reel.py").read_text("utf-8")
+    assert "ഉറപ്പിച്ചു" not in scenes  # no narration that the reel doesn't show
+
+
+def _wav(path, seconds):
+    import struct, wave
+    with wave.open(str(path), "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(16000)
+        w.writeframes(struct.pack("<h", 0) * int(seconds * 16000))
+    return path
+
+
+def test_long_lines_are_sped_up_to_fit_before_the_next(tmp_path):
+    clips = [(0.0, _wav(tmp_path / "a.wav", 3.0)), (2.0, _wav(tmp_path / "b.wav", 1.0)),
+             (4.0, _wav(tmp_path / "c.wav", 9.0))]
+    tempos = mod.fit_tempos(clips, end=6.0)
+    assert tempos[0] > 1.5 - 0.11 and tempos[0] <= mod.MAX_SPEEDUP  # capped
+    assert tempos[1] == 1.0 and tempos[2] == mod.MAX_SPEEDUP
+    cmd = mod.mix_command("ffmpeg", clips, tmp_path / "o.wav", None, 0.3, tempos)
+    graph = cmd[cmd.index("-filter_complex") + 1]
+    assert f"atempo={mod.MAX_SPEEDUP}" in graph and graph.count("atempo") == 2

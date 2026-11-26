@@ -34,6 +34,6 @@ def test_speaks_each_line_and_writes_the_voice_track(monkeypatch, tmp_path):
 
     monkeypatch.setattr(mod, "_load", load)
     assert mod.main(["--engine", "mms", "--out", str(tmp_path)]) == 0
-    assert len(spoken) == 6 and spoken[0].startswith("ഒരു")
+    assert len(spoken) == 11 and spoken[0].startswith("ഒരു")
     with wave.open(str(tmp_path / "narration.wav")) as w:
         assert w.getnframes() / w.getframerate() > 36  # last line starts at 36.2 s

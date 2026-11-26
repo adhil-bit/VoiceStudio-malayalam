@@ -16,6 +16,8 @@ on:
     paths:
       - "reels/**"
       - ".github/workflows/malayalam-reel.yml"
+      - "scripts/malayalam_reel.py"
+      - "scripts/render_reel_ci.py"
 
 permissions:
   contents: write   # publish the result to the reel-output branch
