@@ -51,6 +51,21 @@ same licence. The speakers agreed to an open research corpus, not to having
 their voices imitated in what you publish: use them respectfully and label the
 result as synthetic speech.
 
+## Narrate a reel
+
+`scripts/malayalam_reel.py` sends each line of a script to your running
+VoiceStudio, places it at its start time and mixes it over an exported video's
+music (needs ffmpeg):
+
+```bash
+python scripts/malayalam_reel.py --video reel.mp4                 # Indic Parler-TTS, Anjali
+python scripts/malayalam_reel.py --video reel.mp4 --engine indicf5 \
+  --ref-audio malayalam-voices/Joji-1.wav --ref-text-file malayalam-voices/Joji-1.txt
+```
+
+It ships the "Spotlight Effect" reel's script; `--script lines.json` takes your
+own (`[{"at": 0.2, "text": "…"}, …]`). Each line is kept in `reel-voice/`.
+
 ## Open Malayalam speech datasets
 
 For fine-tuning or evaluating a model. Check each licence before commercial
