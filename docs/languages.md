@@ -25,6 +25,13 @@ A plain "Portuguese" or `pt`, including every setting saved before the split,
 means Brazilian Portuguese. API callers can pass either picker name, `pt-BR` or
 `pt-PT` as the language, and `pt-PT` as a dub translation target.
 
+## Malayalam
+
+Malayalam (`ml`) is spoken by OmniVoice and by three optional engines trained
+on Indian speech — IndicF5, Indic Parler-TTS and MMS-TTS Malayalam. See the
+[Malayalam guide](malayalam.md) for which to pick, free reference voices to
+clone, and open Malayalam datasets.
+
 ## Uyghur
 
 Uyghur (`ug`, ئۇيغۇرچە; listed as "Uighur" below) is spoken by OmniVoice and

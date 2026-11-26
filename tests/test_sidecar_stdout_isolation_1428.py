@@ -43,6 +43,8 @@ EXPECTED_SIDECARS = {
     ENGINES / "confucius4" / "main.py",
     ENGINES / "dots_tts" / "main.py",
     ENGINES / "indextts" / "main.py",
+    ENGINES / "indic_parler" / "main.py",
+    ENGINES / "indicf5" / "main.py",
     ENGINES / "ming_tts" / "main.py",
     ENGINES / "moss_sfx" / "main.py",
     ENGINES / "moss_tts_v15" / "main.py",

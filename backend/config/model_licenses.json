@@ -2817,6 +2817,174 @@
       }
     },
     {
+      "id": "ai4bharat/IndicF5",
+      "license": "mit",
+      "commercial_use": false,
+      "review_status": "unreviewed",
+      "credit": "ai4bharat/IndicF5 (AI4Bharat, IIT Madras)",
+      "source_url": "https://huggingface.co/ai4bharat/IndicF5",
+      "evidence_url": "https://huggingface.co/ai4bharat/IndicF5/blob/fb652a96e508091045890dae5bb99fe511facbcf/README.md",
+      "revision": "fb652a96e508091045890dae5bb99fe511facbcf",
+      "engines": [
+        "indicf5"
+      ],
+      "configured_at": "backend/engines/indicf5/main.py:42",
+      "notes": "MIT is the model card's licence metadata for the weights; it is not verified permission for this distribution. The repository is gated (terms accepted on the Hub), ships remote code run at the pinned revision, and the GitHub source (AI4Bharat/IndicF5) carries no LICENSE file. Training data (Rasa, IndicTTS, LIMMITS, IndicVoices-R) and the Vocos vocoder terms require review.",
+      "runtime_revision": null,
+      "runtime_pin_scope": "external",
+      "runtime_pin_source": null,
+      "component_closure": "incomplete",
+      "commercial_inference": "unknown",
+      "commercial_outputs": "unknown",
+      "documents": [],
+      "artifacts": [],
+      "required_components": [],
+      "upstream_access": "unknown",
+      "audit_observations": {
+        "commercial_inference": {
+          "status": "unreviewed",
+          "scope": "Selected weight/component only; not complete workflow clearance."
+        },
+        "output_terms": {
+          "status": "not_assessed",
+          "ownership_or_all_rights_cleared": false
+        },
+        "sources": [],
+        "open_questions": [
+          "Governing terms of the code repository (no LICENSE file at the pinned commit) and of the Vocos vocoder at the installed revision",
+          "Training-data terms (Rasa, IndicTTS, LIMMITS, IndicVoices-R) and attribution/NOTICE duties",
+          "Reference voice and input rights, consent, training-provenance scope"
+        ],
+        "identified_components": []
+      }
+    },
+    {
+      "id": "ai4bharat/indic-parler-tts",
+      "license": "apache-2.0",
+      "commercial_use": false,
+      "review_status": "unreviewed",
+      "credit": "ai4bharat/indic-parler-tts (AI4Bharat, IIT Madras; Hugging Face Parler-TTS)",
+      "source_url": "https://huggingface.co/ai4bharat/indic-parler-tts",
+      "evidence_url": "https://huggingface.co/ai4bharat/indic-parler-tts/blob/660bc53c64ae83150613264111708a0465211237/README.md",
+      "revision": "660bc53c64ae83150613264111708a0465211237",
+      "engines": [
+        "indic-parler-tts"
+      ],
+      "configured_at": "backend/engines/indic_parler/main.py:31",
+      "notes": "Apache-2.0 is the model card's licence metadata for the weights; it is not verified permission for this distribution. The repository is gated (terms accepted on the Hub). The card lists training datasets with their own terms (GLOBE, IndicTTS, LIMMITS, Rasa) that require review.",
+      "runtime_revision": null,
+      "runtime_pin_scope": "external",
+      "runtime_pin_source": null,
+      "component_closure": "incomplete",
+      "commercial_inference": "unknown",
+      "commercial_outputs": "unknown",
+      "documents": [],
+      "artifacts": [],
+      "required_components": [],
+      "upstream_access": "unknown",
+      "audit_observations": {
+        "commercial_inference": {
+          "status": "unreviewed",
+          "scope": "Selected weight/component only; not complete workflow clearance."
+        },
+        "output_terms": {
+          "status": "not_assessed",
+          "ownership_or_all_rights_cleared": false
+        },
+        "sources": [],
+        "open_questions": [
+          "Governing terms at the installed revision and of the training data",
+          "Attribution/NOTICE/redistribution duties",
+          "Reference voice and input rights, consent, training-provenance scope"
+        ],
+        "identified_components": []
+      }
+    },
+    {
+      "id": "google/flan-t5-large",
+      "license": "apache-2.0",
+      "commercial_use": false,
+      "review_status": "unreviewed",
+      "credit": "google/flan-t5-large (Google)",
+      "source_url": "https://huggingface.co/google/flan-t5-large",
+      "evidence_url": "https://huggingface.co/google/flan-t5-large/blob/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/README.md",
+      "revision": "0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
+      "engines": [
+        "indic-parler-tts"
+      ],
+      "configured_at": "backend/engines/indic_parler/main.py:36",
+      "notes": "Only the tokenizer is fetched: it encodes Indic Parler-TTS voice descriptions. Apache-2.0 is the model card's licence metadata, not verified permission for this distribution.",
+      "runtime_revision": null,
+      "runtime_pin_scope": "external",
+      "runtime_pin_source": null,
+      "component_closure": "incomplete",
+      "commercial_inference": "unknown",
+      "commercial_outputs": "unknown",
+      "documents": [],
+      "artifacts": [],
+      "required_components": [],
+      "upstream_access": "unknown",
+      "audit_observations": {
+        "commercial_inference": {
+          "status": "unreviewed",
+          "scope": "Selected weight/component only; not complete workflow clearance."
+        },
+        "output_terms": {
+          "status": "not_assessed",
+          "ownership_or_all_rights_cleared": false
+        },
+        "sources": [],
+        "open_questions": [
+          "Governing terms at the installed revision and of the training data",
+          "Attribution/NOTICE/redistribution duties",
+          "Reference voice and input rights, consent, training-provenance scope"
+        ],
+        "identified_components": []
+      }
+    },
+    {
+      "id": "facebook/mms-tts-mal",
+      "license": "cc-by-nc-4.0",
+      "commercial_use": false,
+      "review_status": "unreviewed",
+      "credit": "facebook/mms-tts-mal (Meta AI, Massively Multilingual Speech)",
+      "source_url": "https://huggingface.co/facebook/mms-tts-mal",
+      "evidence_url": "https://huggingface.co/facebook/mms-tts-mal/blob/893b8c6442d6a630896d1d3ac0f429094ddfae82/README.md",
+      "revision": "893b8c6442d6a630896d1d3ac0f429094ddfae82",
+      "engines": [
+        "mms-tts-mal"
+      ],
+      "configured_at": "backend/engines/indic_parler/main.py:38",
+      "notes": "CC-BY-NC-4.0 (model card): non-commercial use only, so VoiceStudio asks for licence acceptance before it loads. Not gated on the Hub.",
+      "runtime_revision": null,
+      "runtime_pin_scope": "external",
+      "runtime_pin_source": null,
+      "component_closure": "incomplete",
+      "commercial_inference": "unknown",
+      "commercial_outputs": "unknown",
+      "documents": [],
+      "artifacts": [],
+      "required_components": [],
+      "upstream_access": "unknown",
+      "audit_observations": {
+        "commercial_inference": {
+          "status": "unreviewed",
+          "scope": "Selected weight/component only; not complete workflow clearance."
+        },
+        "output_terms": {
+          "status": "not_assessed",
+          "ownership_or_all_rights_cleared": false
+        },
+        "sources": [],
+        "open_questions": [
+          "Governing terms at the installed revision and of the training data",
+          "Attribution/NOTICE/redistribution duties",
+          "Reference voice and input rights, consent, training-provenance scope"
+        ],
+        "identified_components": []
+      }
+    },
+    {
       "id": "facebook/w2v-bert-2.0",
       "license": "mit",
       "commercial_use": false,

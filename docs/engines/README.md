@@ -46,6 +46,9 @@ approval), [Windows](../install/windows.md), [Linux](../install/linux.md),
 | PocketTTS (Kyutai) | [pockettts](pockettts.md) | CPU (not Intel Mac) | ✅ | `uv sync --extra pockettts` + license |
 | Confucius4-TTS | [confucius4-tts](confucius4-tts.md) | CUDA · CPU | ✅ | clone + env var |
 | Ming-3.0-tts (0.5B) | [ming-tts](ming-tts.md) | NVIDIA CUDA only | ✅ | one-click install (Linux) or clone + env var |
+| IndicF5 (Malayalam + 10 Indian languages) | [indicf5](indicf5.md) | CUDA · MPS · CPU (not Intel Mac) | ✅ (reference + transcript) | one-click install or clone + env var; gated weights |
+| Indic Parler-TTS (Malayalam + 20 languages) | [indic-parler-tts](indic-parler-tts.md) | CUDA · MPS · CPU (not Intel Mac) | — (voice described in words) | one-click install or clone + env var; gated weights |
+| MMS-TTS Malayalam | [indic-parler-tts](indic-parler-tts.md#mms-tts-malayalam) | CUDA · MPS · CPU (not Intel Mac) | — (one voice) | uses the Indic Parler-TTS install; non-commercial weights |
 | audio.cpp (Breeze-TTS-2) | [audio-cpp](audio-cpp.md) | CPU + Vulkan/Metal/CUDA/HIP/ROCm where compiled | ✅ + voice design | prebuilt binary + env var (weights research/non-commercial) |
 | audio.cpp (dots.tts SOAR) | [audio-cpp](audio-cpp.md#dotstts) | CPU + Vulkan/Metal/CUDA/HIP/ROCm where compiled, incl. Windows | ✅ | runtime + weights from Model Catalogue (Apache-2.0) |
 | CosyVoice 3 GGUF | [cosyvoice-gguf](cosyvoice-gguf.md) | CPU + Vulkan (native runtime build) | ✅ reference cloning + instruct | user-built native runtime + model catalogue |
