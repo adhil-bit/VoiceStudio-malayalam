@@ -1,0 +1,58 @@
+name: Malayalam reel voice
+
+# Speaks the Malayalam reel script with VoiceStudio's Indic Parler-TTS (or
+# MMS-TTS) engine code on a GitHub runner, and mixes it into reels/reel.mp4.
+# Run it from Actions → "Malayalam reel voice" → Run workflow, or upload a new
+# reels/reel.mp4. Download the result from the run's Artifacts.
+on:
+  workflow_dispatch:
+    inputs:
+      engine:
+        description: "parler (natural, needs HF_TOKEN secret) or mms (one plain voice, non-commercial)"
+        default: parler
+        type: choice
+        options: [parler, mms]
+  push:
+    paths:
+      - "reels/**"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install ffmpeg
+        run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
+      - name: Install the engine runtime (CPU)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch==2.7.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install "git+https://github.com/huggingface/parler-tts.git@d108732cd57788ec86bc857d99a6cabd66663d68"
+      - name: Pick the engine
+        id: pick
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          WANTED: ${{ inputs.engine || 'parler' }}
+        run: |
+          if [ "$WANTED" = "parler" ] && [ -z "$HF_TOKEN" ]; then
+            echo "::warning::No HF_TOKEN secret, so using MMS-TTS Malayalam. Add HF_TOKEN for Indic Parler-TTS."
+            echo "engine=mms" >> "$GITHUB_OUTPUT"
+          else
+            echo "engine=$WANTED" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Speak and mix
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python scripts/render_reel_ci.py --engine "${{ steps.pick.outputs.engine }}" --video reels/reel.mp4 --out out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: malayalam-reel-${{ steps.pick.outputs.engine }}
+          path: out/
+          retention-days: 14

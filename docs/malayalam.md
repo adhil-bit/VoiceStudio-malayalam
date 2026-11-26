@@ -66,6 +66,18 @@ python scripts/malayalam_reel.py --video reel.mp4 --engine indicf5 \
 It ships the "Spotlight Effect" reel's script; `--script lines.json` takes your
 own (`[{"at": 0.2, "text": "…"}, …]`). Each line is kept in `reel-voice/`.
 
+### On GitHub, with no computer setup
+
+The **Malayalam reel voice** workflow (`.github/workflows/malayalam-reel.yml`)
+runs the same Indic Parler-TTS / MMS-TTS engine code on a GitHub runner:
+
+1. In the repository's **Actions** tab, enable workflows (forks start with them off).
+2. For Indic Parler-TTS, add a repository secret `HF_TOKEN` (Settings → Secrets and
+   variables → Actions) from a Hugging Face account that accepted the model's
+   terms. Without it the workflow uses MMS-TTS Malayalam (non-commercial).
+3. Upload the exported reel as `reels/reel.mp4`, or run the workflow by hand.
+4. Download `final_reel.mp4` (and each line's WAV) from the run's **Artifacts**.
+
 ## Open Malayalam speech datasets
 
 For fine-tuning or evaluating a model. Check each licence before commercial
