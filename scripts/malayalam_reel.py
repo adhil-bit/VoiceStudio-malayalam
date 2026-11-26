@@ -55,9 +55,9 @@ REEL_SECONDS = 40.0
 MAX_SPEEDUP = 1.4
 
 DEFAULT_DESCRIPTION = (
-    "Anjali speaks in a warm, gentle storytelling tone at a moderate pace, with "
-    "slight pauses between sentences. The recording is very clear, close to the "
-    "microphone, with no background noise."
+    "Anjali speaks Malayalam with an excited, energetic and expressive tone at a "
+    "moderately fast pace, with clear pronunciation. The recording is very clear, "
+    "close to the microphone, with no background noise."
 )
 
 
